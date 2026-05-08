@@ -242,7 +242,8 @@
 
                 <p>
                     <strong>Data:</strong>
-                    <span th:text="${appointment.date} + ${appointment.time}"></span>
+<!--                    <span th:text="${appointment.dateTime}"></span>-->
+                    <span th:text="${#temporals.format(appointment.dateTime, 'dd/MM/yyyy - HH:mm')}"></span>
                 </p>
 
                 <p>
@@ -253,7 +254,8 @@
                 <!-- ✅ Preço -->
                 <p>
                     <strong>Preço:</strong>
-                    <span th:text="'R$ ' + ${appointment.price}"></span>
+<!--                    <span th:text="'R$ ' + ${appointment.price}"></span>-->
+                    <span th:text="${appointment.formattedPrice}"></span>
                 </p>
 
                 <!-- ✅ Botão cancelar -->

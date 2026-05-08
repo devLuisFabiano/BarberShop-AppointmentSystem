@@ -16,17 +16,9 @@ import java.time.LocalTime;
 
 @Data
 public class AppointmentRegisterDTO {
-    @NotNull
     private User user;
-    @NotNull
     private Barber barber;
-    @NotBlank
-    private String time;
-    @NotBlank
-    private String date;
-    @NotNull
     @Enumerated(EnumType.STRING)
     private Service service;
-    @NotEmpty
     private  Double price;
 }

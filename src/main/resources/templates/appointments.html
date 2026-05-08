@@ -326,6 +326,12 @@
         .bp-btn:active {
             transform: scale(0.99);
         }
+
+        .bp-alert--error {
+            background: rgba(180, 40, 40, 0.1);
+            border: 1px solid rgba(180, 40, 40, 0.35);
+            color: #f08080;
+        }
     </style>
 </head>
 <body>
@@ -368,6 +374,10 @@
             ✦ Agendamento realizado com sucesso!
         </div>
 
+        <div th:if="${error}" class="bp-alert bp-alert--error">
+            ✦ <span th:text="${error}"></span>
+        </div>
+
         <!-- Form -->
         <div class="bp-card">
             <form th:action="@{/appointment}" th:object="${appointment}" method="post">
@@ -375,7 +385,7 @@
                 <!-- Date -->
                 <div class="bp-field">
                     <label class="bp-label" for="date">Data</label>
-                    <input class="bp-input" type="date" id="date" th:field="*{date}" required/>
+                    <input class="bp-input" type="date" id="date" name="date" required/>
                 </div>
 
 
@@ -398,7 +408,7 @@
                 <div class="bp-field">
                     <label class="bp-label" for="time">Horário</label>
                     <div class="bp-select-wrapper">
-                        <select class="bp-select" id="time" th:field="*{time}" required>
+                        <select class="bp-select" id="time" name="time" required>
                             <option value="" disabled selected>Selecione um horário</option>
                             <option th:each="slot : ${timeSlots}"
                                     th:value="${slot}"

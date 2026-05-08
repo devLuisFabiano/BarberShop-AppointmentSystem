@@ -24,10 +24,12 @@ public class Appointment {
     private Barber barber;
     @ManyToOne
     private User user;
-    private String time;
-    private String date;
+    private LocalDateTime dateTime;
     @Enumerated(EnumType.STRING)
     private Service service;
     private Double price;
 
+    public String getFormattedPrice() {
+        return String.format("R$ %.2f", price).replace(".", ",");
+    }
 }
