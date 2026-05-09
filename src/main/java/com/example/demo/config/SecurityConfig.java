@@ -18,6 +18,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/h2-console/**").permitAll()
                         .requestMatchers("/").permitAll()
                         .requestMatchers("/login").permitAll()
                         .requestMatchers("/register").permitAll()
@@ -40,8 +41,13 @@ public class SecurityConfig {
                         })
                         .permitAll()
                 )
-                //.formLogin(form -> form.defaultSuccessUrl("/profile", true))
                 .logout(config -> config.logoutSuccessUrl("/"))
+                .csrf(csrf -> csrf
+                        .ignoringRequestMatchers("/h2-console/**")
+                )
+                .headers(headers -> headers
+                        .frameOptions(frame -> frame.sameOrigin()) // ✅ só bloqueia frames de outros domínios
+                )
                 .build();
     }
 
