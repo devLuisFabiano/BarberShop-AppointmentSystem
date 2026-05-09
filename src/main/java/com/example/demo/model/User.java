@@ -29,12 +29,4 @@ public class User {
         this.password = password;
         this.role = role;
     }
-//
-//    public void addAppointment(Appointment appointment) {
-//        this.appointments.add(appointment);
-//    }
-//
-//    public void removeAppointment(Appointment appointment) {
-//        this.appointments.add(appointment);
-//    }
 }

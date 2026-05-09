@@ -37,12 +37,12 @@ public class UserController {
                            BindingResult bindingResult){
 
         if(!userRegisterDTO.getPassword().equals(userRegisterDTO.getConfirmPassword())){
-            bindingResult.addError(new FieldError("userRegisterDTO", "password", "Passwords do not match"));
+            bindingResult.addError(new FieldError("userRegisterDTO", "password", "As senhas não coincidem"));
         }
 
         User userExists = userRepository.findByEmail(userRegisterDTO.getEmail());
         if(userExists != null){
-            bindingResult.addError(new FieldError("userRegisterDTO", "email", "email already exists"));
+            bindingResult.addError(new FieldError("userRegisterDTO", "email", "Email já cadastrado"));
         }
 
         if(bindingResult.hasErrors()){

@@ -1,61 +1,46 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.EmployeeRegisterDTO;
-import com.example.demo.dto.UserRegisterDTO;
-import com.example.demo.model.Role;
-import com.example.demo.model.User;
-import com.example.demo.repository.BarberRepository;
 import com.example.demo.service.BarberService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.ui.Model;
 import com.example.demo.model.Barber;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 public class AdminController {
-//    @Autowired
-//    private BarberService barberService;
     @Autowired
-    private BarberRepository barberRepository;
+    private BarberService barberService;
 
     @GetMapping("/admin/dashboard")
     public String dashboard(Model model) {
-        List<Barber> employees = barberRepository.findAll();
+        List<Barber> employees = barberService.getAllBarbers();
         if(employees.isEmpty()){
             model.addAttribute("msg", "Nenhum Barbeiro registrado");
             return "dashboard";
         }
         model.addAttribute("employees", employees);
+        model.addAttribute("err", new EmployeeRegisterDTO());
 
         return "dashboard";
     }
 
     @PostMapping("/admin/dashboard")
-    public String register(Model model, @Valid @ModelAttribute EmployeeRegisterDTO employeeRegisterDTO,
-                           BindingResult bindingResult) {
+    public String register(Model model, @Valid @ModelAttribute("err") EmployeeRegisterDTO employeeRegisterDTO, BindingResult bindingResult) {
 
-        Barber barberExists = barberRepository.findByName(employeeRegisterDTO.getName());
-        if(barberExists != null){
-            bindingResult.addError(new FieldError("employees", "name", "this employee already exists"));
-        }
+        barberService.checkIfBarberAlreadyExists(employeeRegisterDTO.getEmail(), bindingResult);
 
         if(bindingResult.hasErrors()){
+            model.addAttribute("employees", barberService.getAllBarbers());
             return "dashboard";
         }
         try {
-            Barber barber = new Barber(employeeRegisterDTO.getName(), employeeRegisterDTO.getEmail());
-            barberRepository.save(barber);
-            model.addAttribute("success", true);
-            model.addAttribute("employees", barberRepository.findAll());
+            barberService.saveBarber(new Barber(employeeRegisterDTO.getName(), employeeRegisterDTO.getEmail()), model);
         }
         catch (Exception e){
             System.out.printf("Error: %s%n", e.getMessage());
@@ -68,14 +53,7 @@ public class AdminController {
 
     @PostMapping("/admin/employees/delete/{id}")
     public String removeEmployee(@PathVariable Long id, Model model) {
-
-        Optional<Barber> employees = barberRepository.findById(id);
-
-        if(employees.isPresent()){
-            barberRepository.deleteById(id);
-            model.addAttribute("employees", barberRepository.findAll());
-        }
-
+        barberService.deleteBarber(id, model);
         return "redirect:/admin/dashboard";
     }
 }
