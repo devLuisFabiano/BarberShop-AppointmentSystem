@@ -19,19 +19,19 @@ public class Barber{
     private Long id;
     private String name;
     private String email;
-    @OneToMany(mappedBy = "barber", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Appointment> appointments = new ArrayList<>();
+//    @OneToMany(mappedBy = "barber", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+//    private List<Appointment> appointments = new ArrayList<>();
 
     public Barber(String name, String email) {
         this.name = name;
         this.email = email;
     }
 
-    public void  addAppointment(Appointment appointment) {
-        appointments.add(appointment);
-    }
-
-    public  void removeAppointment(Appointment appointment) {
-        appointments.remove(appointment);
-    }
+//    public void  addAppointment(Appointment appointment) {
+//        appointments.add(appointment);
+//    }
+//
+//    public  void removeAppointment(Appointment appointment) {
+//        appointments.remove(appointment);
+//    }
 }

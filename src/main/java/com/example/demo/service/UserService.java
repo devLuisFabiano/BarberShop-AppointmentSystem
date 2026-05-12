@@ -25,4 +25,12 @@ public class UserService implements UserDetailsService{
         }
         throw new UsernameNotFoundException("User not found with emali: " + email);
     }
+
+    public  User findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    public void save(User user){
+        userRepository.save(user);
+    }
 }

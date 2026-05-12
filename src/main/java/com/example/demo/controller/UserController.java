@@ -4,6 +4,7 @@ import com.example.demo.dto.UserRegisterDTO;
 import com.example.demo.model.Role;
 import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
+import com.example.demo.service.UserService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class UserController {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService  userService;
 
     @GetMapping
     public String ShowRegisterForm(Model model){
@@ -40,7 +41,7 @@ public class UserController {
             bindingResult.addError(new FieldError("userRegisterDTO", "password", "As senhas não coincidem"));
         }
 
-        User userExists = userRepository.findByEmail(userRegisterDTO.getEmail());
+        User userExists = userService.findByEmail(userRegisterDTO.getEmail());
         if(userExists != null){
             bindingResult.addError(new FieldError("userRegisterDTO", "email", "Email já cadastrado"));
         }
@@ -53,7 +54,7 @@ public class UserController {
                     userRegisterDTO.getEmail(),
                     new BCryptPasswordEncoder().encode(userRegisterDTO.getPassword()),
                     Role.USER.name());
-            userRepository.save(user);
+            userService.save(user);
             model.addAttribute("success", true);
         }
         catch (Exception e){

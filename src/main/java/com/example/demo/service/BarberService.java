@@ -1,7 +1,9 @@
 package com.example.demo.service;
 
+import com.example.demo.model.Appointment;
 import com.example.demo.model.Barber;
 import com.example.demo.model.User;
+import com.example.demo.repository.AppointmentRepository;
 import com.example.demo.repository.BarberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,6 +20,8 @@ import java.util.Optional;
 public class BarberService{
     @Autowired
     private BarberRepository barberRepository;
+    @Autowired
+    private AppointmentService appointmentService;
 
     public Barber getBarberById(Long id){
         Optional<Barber> barber = barberRepository.findById(id);
@@ -47,10 +51,13 @@ public class BarberService{
 
     public void deleteBarber(Long id, Model model){
         Barber barber = getBarberById(id);
+        List<Appointment> appointments = appointmentService.getAppointmentByBarber(barber);
 
-        if(barber != null){
-            barberRepository.deleteById(id);
-            model.addAttribute("barber", barberRepository.findAll());
+        if(appointments.isEmpty()){
+            if(barber != null){
+                barberRepository.deleteById(id);
+                model.addAttribute("barber", barberRepository.findAll());
+            }
         }
     }
 }

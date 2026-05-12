@@ -27,7 +27,6 @@ import java.util.List;
 public class ProfileController {
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private AppointmentRepository appointmentRepository;
 

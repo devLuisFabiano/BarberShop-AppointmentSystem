@@ -295,6 +295,15 @@
 
                     </form>
 
+                    <form th:action="@{/admin/employees/{id}(id=${employee.id})}"
+                          method="get">
+
+                        <button class="delete-btn" type="submit">
+                            Detalhes
+                        </button>
+
+                    </form>
+
                 </div>
 
             </div>

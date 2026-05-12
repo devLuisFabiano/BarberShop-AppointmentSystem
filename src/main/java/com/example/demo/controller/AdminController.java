@@ -1,9 +1,12 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.EmployeeRegisterDTO;
+import com.example.demo.model.User;
+import com.example.demo.service.AppointmentService;
 import com.example.demo.service.BarberService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.ui.Model;
 import com.example.demo.model.Barber;
 import org.springframework.stereotype.Controller;
@@ -16,6 +19,8 @@ import java.util.List;
 public class AdminController {
     @Autowired
     private BarberService barberService;
+    @Autowired
+    private AppointmentService appointmentService;
 
     @GetMapping("/admin/dashboard")
     public String dashboard(Model model) {
@@ -53,7 +58,17 @@ public class AdminController {
 
     @PostMapping("/admin/employees/delete/{id}")
     public String removeEmployee(@PathVariable Long id, Model model) {
+
         barberService.deleteBarber(id, model);
         return "redirect:/admin/dashboard";
+    }
+
+    @GetMapping("admin/employees/{id}")
+    public String detailsEmployee(@PathVariable Long id, Model model, Authentication authentication) {
+        Barber barber = barberService.getBarberById(id);
+        model.addAttribute("username", barber.getName());
+        model.addAttribute("appointments", appointmentService.getAppointmentByBarber(barber));
+
+        return "barber-profile";
     }
 }

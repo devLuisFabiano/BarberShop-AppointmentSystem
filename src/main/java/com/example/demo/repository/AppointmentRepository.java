@@ -13,6 +13,7 @@ import java.util.List;
 
 public interface AppointmentRepository extends JpaRepository<Appointment, Long> {
     public List<Appointment> findByUser(User user);
+    public List<Appointment> findByBarber(Barber barber);
     @Modifying
     @Query("DELETE FROM appointment a WHERE a.id = :id")
     void deleteAppointmentById(@Param("id") Long id);
