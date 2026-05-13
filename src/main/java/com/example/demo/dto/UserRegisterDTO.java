@@ -1,9 +1,6 @@
 package com.example.demo.dto;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 
 @Data
@@ -14,7 +11,8 @@ public class UserRegisterDTO {
     @Email
     private String email;
     @NotBlank
-    @Size(min = 2, max = 20, message = "Senha precisa ter entre 12 e 20 caracteres")
+    //@Size(min = 12, max = 20, message = "Senha precisa ter entre 12 e 20 caracteres")
+    @Pattern(regexp = "^(?=.*[A-Z])(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?])(?=.*[0-9]).{12,}$", message = "A senha deve ter uma letra maiúscula, um numero e um símbolo")
     private String password;
     @NotBlank
     private String confirmPassword;
