@@ -25,13 +25,13 @@ public class AdminController {
     @GetMapping("/admin/dashboard")
     public String dashboard(Model model) {
         List<Barber> employees = barberService.getAllBarbers();
+        model.addAttribute("err", new EmployeeRegisterDTO());
+
         if(employees.isEmpty()){
             model.addAttribute("msg", "Nenhum Barbeiro registrado");
             return "dashboard";
         }
         model.addAttribute("employees", employees);
-        model.addAttribute("err", new EmployeeRegisterDTO());
-
         return "dashboard";
     }
 
