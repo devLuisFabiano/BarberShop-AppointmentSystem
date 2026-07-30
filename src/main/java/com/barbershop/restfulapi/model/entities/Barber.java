@@ -26,5 +26,4 @@ public class Barber {
     private String name;
     @OneToMany(mappedBy = "barber")
     private List<Appointment> appointments = new ArrayList<>();
-    private LocalTime lunchBreakStartTime;
 }

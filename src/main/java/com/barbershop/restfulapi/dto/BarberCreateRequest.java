@@ -19,8 +19,6 @@ public record BarberCreateRequest(
                 message = "Password must be at least 12 characters, contain an uppercase letter and a symbol")
         String password,
         @NotBlank(message = "Confirm password is required")
-        String confirmPassword,
-        @NotNull
-        LocalTime lunchBreakStartTime
+        String confirmPassword
 
 ){ }

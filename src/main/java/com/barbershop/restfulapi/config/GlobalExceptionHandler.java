@@ -85,4 +85,16 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.badRequest().body(response);
     }
+
+    @ExceptionHandler(InvalidStatusTransitionException.class)
+    public ResponseEntity<ValidationErrorResponse> handleInvalidTransition(
+            InvalidStatusTransitionException ex, HttpServletRequest request) {
+
+        Map<String, String> fieldErrors = Map.of("status", ex.getMessage());
+        ValidationErrorResponse response = new ValidationErrorResponse(
+                Instant.now(), HttpStatus.CONFLICT.value(), "Conflict",
+                request.getRequestURI(), fieldErrors
+        );
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+    }
 }

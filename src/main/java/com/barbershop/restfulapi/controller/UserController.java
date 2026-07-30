@@ -40,7 +40,7 @@ public class UserController {
             throw new EmailAlreadyExistsException(dto.email());
         }
 
-        User user = new User(null, UUID.randomUUID() ,dto.email(), passwordEncoder.encode(dto.password()), Role.CLIENT);
+        User user = new User(null, UUID.randomUUID() ,dto.email(), passwordEncoder.encode(dto.password()), Role.ADMIN, null, LocalDateTime.now());
         Client client = new Client(null, UUID.randomUUID(), user, dto.name(), null, null, LocalDateTime.now(), LocalDateTime.now());
         UserRegisterResponse response = new UserRegisterResponse(user.getPublicId(), dto.name(), user.getEmail(), user.getRole());
         userRepository.save(user);
