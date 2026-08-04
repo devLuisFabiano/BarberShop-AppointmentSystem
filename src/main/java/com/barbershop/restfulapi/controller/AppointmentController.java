@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -70,6 +72,40 @@ public class AppointmentController {
         appointment.setStatus(AppointmentStatus.valueOf(dto.status()));
         AppointmentCreateResponse response = new AppointmentCreateResponse(appointment.getPublicId(), appointment.getBarber().getName(), appointment.getDateTime(), appointment.getStatus(), appointment.getService().getName());
         appointmentRepository.save(appointment);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/appointments/me")
+    @PreAuthorize("hasAuthority('SCOPE_CLIENT')")
+    public ResponseEntity<List<AppointmentCreateResponse>> getAppointmentsByClient(@AuthenticationPrincipal Jwt jwt) {
+        Client client = clientRepository.findByUser_UserId(Long.parseLong(jwt.getSubject()))
+                .orElseThrow(() -> new EmailAlreadyExistsException("a") );
+
+        List<AppointmentCreateResponse> response = appointmentRepository.findByClient(client).stream()
+                .map(a -> new AppointmentCreateResponse(
+                        a.getPublicId(),
+                        a.getBarber().getName(),
+                        a.getDateTime(),
+                        a.getStatus(),
+                        a.getService().getName()))
+                .toList();
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/appointments")
+    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
+    public ResponseEntity<List<AppointmentCreateResponse>> getAllAppointments(@AuthenticationPrincipal Jwt jwt) {
+
+        List<AppointmentCreateResponse> response = appointmentRepository.findAll().stream()
+                .map(a -> new AppointmentCreateResponse(
+                        a.getPublicId(),
+                        a.getBarber().getName(),
+                        a.getDateTime(),
+                        a.getStatus(),
+                        a.getService().getName()))
+                .toList();
 
         return ResponseEntity.ok(response);
     }
